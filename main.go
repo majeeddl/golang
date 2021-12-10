@@ -1,47 +1,16 @@
 package main
 
 import (
-    "encoding/json"
-    "fmt"
-    "log"
+	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
-// Avenger represents a single hero
-type Avenger struct {
-    RealName string `json:"real_name"`
-    HeroName string `json:"hero_name"`
-    Planet   string `json:"planet"`
-    Alive    bool   `json:"alive"`
-}
-
-func (a *Avenger) isAlive() {
-    a.Alive = true
-}
-
 func main() {
-    avengers := []Avenger{
-        {
-            RealName: "Dr. Bruce Banner",
-            HeroName: "Hulk",
-            Planet:   "Midgard",
-        },
-        {
-            RealName: "Tony Stark",
-            HeroName: "Iron Man",
-            Planet:   "Midgard",
-        },
-        {
-            RealName: "Thor Odinson",
-            HeroName: "Thor",
-            Planet:   "Midgard",
-        },
-    }
+	r := gin.Default()
 
-    avengers[1].isAlive()
+	r.GET("/", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"data": "hello world"})
+	})
 
-    jsonBytes, err := json.Marshal(avengers)
-    if err != nil {
-        log.Fatalln(err)
-    }
-    fmt.Println(string(jsonBytes))
+	r.Run()
 }
