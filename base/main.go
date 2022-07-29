@@ -4,6 +4,7 @@ import (
 	"base/math"
 	"base/print"
 	"base/arrays"
+	"base/maps"
 	"fmt"
 )
 
@@ -19,4 +20,6 @@ func main() {
 	fmt.Println(mathLib.Multiply(2, 4))
 
 	arrays.PrintArrays()
+
+	maps.PrintMaps()
 }
