@@ -3,6 +3,7 @@ package main
 import (
 	"base/arrays"
 	"base/conditions"
+	"base/goroutin"
 	"base/interfaces"
 	"base/maps"
 	"base/math"
@@ -34,4 +35,10 @@ func main() {
 	pointers.CheckPointers()
 
 	interfaces.RunInterfaces()
+
+	goroutin.RunGoroutin()
+
+	goroutin.RunChannels()
+
+	goroutin.RunBufferChannels()
 }
