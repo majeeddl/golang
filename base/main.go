@@ -3,6 +3,7 @@ package main
 import (
 	"base/arrays"
 	"base/conditions"
+	"base/interfaces"
 	"base/maps"
 	"base/math"
 	"base/pointers"
@@ -31,4 +32,6 @@ func main() {
 	structs.UseStructs()
 
 	pointers.CheckPointers()
+
+	interfaces.RunInterfaces()
 }
