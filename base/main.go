@@ -5,6 +5,7 @@ import (
 	"base/conditions"
 	"base/maps"
 	"base/math"
+	"base/pointers"
 	"base/print"
 	"base/structs"
 	"fmt"
@@ -28,4 +29,6 @@ func main() {
 	conditions.PrintConditions()
 
 	structs.UseStructs()
+
+	pointers.CheckPointers()
 }
