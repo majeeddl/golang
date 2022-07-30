@@ -5,6 +5,7 @@ import (
 	"base/print"
 	"base/arrays"
 	"base/maps"
+	"base/conditions"
 	"fmt"
 )
 
@@ -22,4 +23,6 @@ func main() {
 	arrays.PrintArrays()
 
 	maps.PrintMaps()
+
+	conditions.PrintConditions()
 }
