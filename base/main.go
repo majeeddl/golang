@@ -1,11 +1,12 @@
 package main
 
 import (
+	"base/arrays"
+	"base/conditions"
+	"base/maps"
 	"base/math"
 	"base/print"
-	"base/arrays"
-	"base/maps"
-	"base/conditions"
+	"base/structs"
 	"fmt"
 )
 
@@ -25,4 +26,6 @@ func main() {
 	maps.PrintMaps()
 
 	conditions.PrintConditions()
+
+	structs.UseStructs()
 }
