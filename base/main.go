@@ -13,7 +13,7 @@ import (
 	"fmt"
 )
 
-const hello_world = "Hello World"
+const hello_world = "Hello World !"
 
 func main() {
 	fmt.Println(hello_world)
