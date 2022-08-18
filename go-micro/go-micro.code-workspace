@@ -1,7 +1,10 @@
 {
 	"folders": [
 		{
-			"path": "."
+			"path": "./front"
+		},
+{
+			"path": "./broker-service"
 		}
 	],
 	"settings": {}
