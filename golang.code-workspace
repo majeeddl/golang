@@ -1,0 +1,23 @@
+{
+  "folders": [
+    {
+      "path": "base"
+    },
+    {
+      "path": "web-app"
+    },
+    {
+      "path": "clean-architecture"
+    },
+    {
+      "path": "go-micro"
+    },
+    {
+      "path": "tutorials"
+    },
+    {
+      "path": "unit_tests"
+    }
+  ],
+  "settings": {}
+}
