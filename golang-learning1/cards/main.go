@@ -2,11 +2,22 @@ package main
 
 import "fmt"
 
-var deckSize int
  
 func main() {
   card := newCard();
   fmt.Println(card)
+
+  cards := deck{ "one" , "two"}
+
+  cards = append(cards, "three")
+
+  fmt.Println(cards)
+
+  cards.print()
+
+  // for i,card := range cards{
+  //   fmt.Println(i,card)
+  // }
 }
 
 func newCard() string {
