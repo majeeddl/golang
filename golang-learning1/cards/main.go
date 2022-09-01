@@ -7,9 +7,11 @@ func main() {
   card := newCard();
   fmt.Println(card)
 
-  cards := deck{ "one" , "two"}
+  // cards := deck{ "one" , "two"}
 
-  cards = append(cards, "three")
+  // cards = append(cards, "three")
+
+  cards := newDeck()
 
   fmt.Println(cards)
 
