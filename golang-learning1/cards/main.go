@@ -17,9 +17,18 @@ func main() {
 
   cards.print()
 
+  one, two := deal(cards,1)
+
+  one.print()
+  two.print()
   // for i,card := range cards{
   //   fmt.Println(i,card)
   // }
+
+  greeting := "Hi there!"
+  fmt.Println([]byte(greeting))
+
+  fmt.Println(cards.toString())
 }
 
 func newCard() string {
