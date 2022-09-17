@@ -2,11 +2,13 @@ package routes
 
 import (
 	"fmt"
+	"html/template"
 	"net/http"
 )
 
 func HomeRoutes(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello World Web App")
+	//fmt.Fprintf(w, "Hello World Web App")
+	renderTemplate(w, "home.page.tmpl")
 }
 
 //func HomeRoutes(w http.ResponseWriter, r *http.Request) {
@@ -16,6 +18,19 @@ func HomeRoutes(w http.ResponseWriter, r *http.Request) {
 //	fmt.Println("home page ...")
 //}
 
-func addValues(x, y int) int {
-	return x + y
+//func addValues(x, y int) int {
+//	return x + y
+//}
+
+func renderTemplate(w http.ResponseWriter, tmpl string) {
+	fmt.Println("./templates/" + tmpl)
+	parsedTmp, _ := template.ParseFiles("./templates/" + tmpl)
+
+	err := parsedTmp.Execute(w, nil)
+
+	if err != nil {
+		fmt.Println("error parsing template :", err)
+		return
+	}
+
 }
