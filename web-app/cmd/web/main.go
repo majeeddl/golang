@@ -3,8 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"webapp/routes"
-
+	"webapp/pkg/handlers"
 	// "net/http"
 	"webapp/config"
 	// "webapp/routes"
@@ -15,9 +14,9 @@ func main() {
 	config.SetConfig()
 	// http.HandleFunc("/home" , routes.HomeRoutes)
 
-	http.HandleFunc("/", routes.HomeRoutes)
-	http.HandleFunc("/about", routes.AboutRoutes)
-	http.HandleFunc("/divide", routes.DivideRoutes)
+	http.HandleFunc("/", handlers.Home)
+	http.HandleFunc("/about", handlers.About)
+	//http.HandleFunc("/divide", routes.DivideRoutes)
 
 	fmt.Println(config.AppConfig.PORT)
 

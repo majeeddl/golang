@@ -2,7 +2,7 @@ package routes
 
 import (
 	"net/http"
-	"webapp/render"
+	"webapp/pkg/render"
 )
 
 func AboutRoutes(w http.ResponseWriter, r *http.Request) {
