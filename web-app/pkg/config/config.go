@@ -13,7 +13,7 @@ type config struct {
 var AppConfig config
 
 func SetConfig() {
-	err := godotenv.Load("./config/.env")
+	err := godotenv.Load("./pkg/config/.env")
 
 	if err != nil {
 		log.Fatal("env file does not exist")
