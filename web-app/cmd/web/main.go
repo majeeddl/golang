@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"webapp/pkg/config"
 	"webapp/pkg/handlers"
 	// "net/http"
-	"webapp/config"
 	// "webapp/routes"
 )
 
