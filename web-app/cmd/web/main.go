@@ -6,6 +6,9 @@ import (
 	"log"
 	"net/http"
 	"webapp/pkg/config"
+	"webapp/pkg/databases"
+	"webapp/pkg/models"
+
 	// "net/http"
 	// "webapp/routes"
 )
@@ -22,6 +25,14 @@ func main() {
 	fmt.Println(config.AppConfig.PORT)
 
 	//http.ListenAndServe(":"+config.AppConfig.PORT, nil)
+
+	db := databases.DB()
+
+	user := models.User{Name: "Jinzhu", Age: 18}
+
+	result := db.Create(&user)
+
+	fmt.Println(result)
 
 	srv := &http.Server{
 		Addr:    ":" + config.AppConfig.PORT,
