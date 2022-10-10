@@ -16,6 +16,7 @@ func routes() http.Handler {
 	//mux.Get("/about", http.HandlerFunc(handlers.About))
 
 	mux := chi.NewRouter()
+	mux.Use(WriteToConsoleMiddleware)
 
 	mux.Get("/", handlers.Home)
 	mux.Get("/about", handlers.About)
