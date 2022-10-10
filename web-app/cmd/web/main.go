@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
@@ -31,4 +32,14 @@ func main() {
 
 	log.Fatal(err)
 
+}
+
+func run(param int) error {
+	fmt.Println("RUN")
+
+	if param > 2 {
+		return nil
+	}
+
+	return errors.New("param in less than 2")
 }
