@@ -8,6 +8,9 @@
     },
     {
       "path": "logger-service"
+    },
+    {
+      "path": "authentication-service"
     }
   ],
   "settings": {}
