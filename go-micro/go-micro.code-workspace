@@ -1,11 +1,14 @@
 {
-	"folders": [
-		{
-			"path": "./front"
-		},
-{
-			"path": "./broker-service"
-		}
-	],
-	"settings": {}
+  "folders": [
+    {
+      "path": "./front"
+    },
+    {
+      "path": "./broker-service"
+    },
+    {
+      "path": "logger-service"
+    }
+  ],
+  "settings": {}
 }
