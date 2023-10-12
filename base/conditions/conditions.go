@@ -10,9 +10,7 @@ func PrintConditions() {
 	fmt.Println("***  if conditions ***")
 	x := 10
 
-	if x == 4 {
-		fmt.Println(" x = 4")
-	} else if x == 5 {
+	if x == 5 {
 		fmt.Println(" x = 4")
 	} else {
 		fmt.Println(" x = 10")
