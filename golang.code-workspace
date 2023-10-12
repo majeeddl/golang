@@ -20,6 +20,9 @@
     },
     {
       "path": "golang-learning1"
+    },
+    {
+      "path": "health-check"
     }
   ],
   "settings": {}
