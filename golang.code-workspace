@@ -23,6 +23,9 @@
     },
     {
       "path": "health-check"
+    },
+    {
+      "path": "learn-go"
     }
   ],
   "settings": {}
