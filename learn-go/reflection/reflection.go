@@ -29,10 +29,6 @@ func walk(x interface{}, fn func(input string)) {
 		}
 	}
 
-	for i := 0; i < numberOfValues; i++ {
-		walk(getField(i).Interface(), fn)
-	}
-
 	// switch val.Kind() {
 	// case reflect.Struct:
 	// 	for i := 0; i < val.NumField(); i++ {
