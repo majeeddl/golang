@@ -1,28 +1,62 @@
 package main
 
 import (
+	"fiberframework/src/adapters/controllers"
+	"fiberframework/src/adapters/middlewares"
+	"fiberframework/src/adapters/validation"
+	"fiberframework/src/configuration"
 	"fmt"
+	"log"
 
+	_ "fiberframework/docs"
+
+	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/recover"
+	"github.com/gofiber/swagger"
+	"github.com/joho/godotenv"
 )
 
+var validate = validator.New()
+
+// @title			Fiber Framework API
+// @version		1.0
+// @description	This is a sample swagger for Fiber
+// @termsOfService	http://swagger.io/terms/
+// @contact.name	API Support
+// @contact.email	fiber@swagger.io
+// @license.name	Apache 2.0
+// @license.url	http://www.apache.org/licenses/LICENSE-2.0.html
+// @host			localhost:3000
 func main() {
+
+	err := godotenv.Load()
+
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
 	app := fiber.New()
 
-	app.Get("/before-middleware", func(ctx *fiber.Ctx) error {
-		return ctx.SendString("Hello, Fiber! Before Middleware")
-	})
+	app.Get("/swagger/*", swagger.HandlerDefault)
 
-	app.Use(func(c *fiber.Ctx) error {
+	customValidator := &validation.Validation{
+		Validator: validate,
+	}
 
-		fmt.Println("First middleware")
+	err = validation.SetRoutesValidation(customValidator)
 
-		return c.Next()
-	})
+	if err != nil {
+		log.Fatal("Error setting validation rules")
+	}
 
-	app.Get("/", func(ctx *fiber.Ctx) error {
-		return ctx.SendString("Hello, Fiber!")
-	})
+	app.Use(recover.New())
+	app.Use(cors.New())
 
-	app.Listen(":3000")
+	middlewares.SetRoutesMiddlewares(app)
+
+	controllers.OrdersController(app, customValidator)
+
+	app.Listen(fmt.Sprintf(":%s", configuration.GetPort()))
 }

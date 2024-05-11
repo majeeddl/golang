@@ -1,0 +1,86 @@
+definitions:
+  dto.CreateOrderDTO:
+    properties:
+      age:
+        type: integer
+      country_code:
+        type: string
+      order_number:
+        type: string
+      shipment_number:
+        type: string
+    required:
+    - age
+    - country_code
+    - order_number
+    - shipment_number
+    type: object
+host: localhost:3000
+info:
+  contact:
+    email: fiber@swagger.io
+    name: API Support
+  description: This is a sample swagger for Fiber
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Fiber Framework API
+  version: "1.0"
+paths:
+  /orders:
+    post:
+      consumes:
+      - application/json
+      description: Create an order
+      parameters:
+      - description: Order object that needs to be created
+        in: body
+        name: dto.createOrderDTO
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateOrderDTO'
+      - default: '"favana"'
+        description: Tenant ID
+        in: header
+        name: x-tenantId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Create an order
+      tags:
+      - orders
+  /orders/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get string by ID
+      parameters:
+      - description: Order ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - default: '"favana"'
+        description: Tenant ID
+        in: header
+        name: x-tenantId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Get order by ID
+      tags:
+      - orders
+swagger: "2.0"
