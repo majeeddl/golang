@@ -9,8 +9,8 @@ func tenantMiddleware(app *fiber.App) fiber.Router {
 
 		tenantId := ctx.Get("x-tenantId")
 
-		if tenantId == "" {
-			return ctx.Status(400).JSON("Tenant Id is required")
+		if tenantId != "" {
+			// return ctx.Status(400).JSON("Tenant Id is required")
 		}
 
 		ctx.Locals("tenantId", tenantId)

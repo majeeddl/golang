@@ -3,6 +3,8 @@ package main
 import (
 	"fiberframework/src/adapters/controllers"
 	"fiberframework/src/adapters/middlewares"
+	"fiberframework/src/adapters/sockets"
+
 	"fiberframework/src/adapters/validation"
 	"fiberframework/src/configuration"
 	"fmt"
@@ -12,9 +14,10 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/cors"
-	"github.com/gofiber/fiber/v2/middleware/recover"
-	"github.com/gofiber/swagger"
+
+	// "github.com/gofiber/fiber/v2/middleware/cors"
+	// "github.com/gofiber/fiber/v2/middleware/recover"
+	// "github.com/gofiber/swagger"
 	"github.com/joho/godotenv"
 )
 
@@ -39,24 +42,31 @@ func main() {
 
 	app := fiber.New()
 
-	app.Get("/swagger/*", swagger.HandlerDefault)
+	// app.Use(cache.New(cache.Config{
+	// 	Next: func(c *fiber.Ctx) bool {
+	// 		return strings.Contains(c.Route().Path, "/ws")
+	// 	},
+	// }))
+	// app.Get("/swagger/*", swagger.HandlerDefault)
 
 	customValidator := &validation.Validation{
 		Validator: validate,
 	}
 
-	err = validation.SetRoutesValidation(customValidator)
+	// err = validation.SetRoutesValidation(customValidator)
 
-	if err != nil {
-		log.Fatal("Error setting validation rules")
-	}
+	// if err != nil {
+	// 	log.Fatal("Error setting validation rules")
+	// }
 
-	app.Use(recover.New())
-	app.Use(cors.New())
+	// app.Use(recover.New())
+	// app.Use(cors.New())
 
 	middlewares.SetRoutesMiddlewares(app)
 
 	controllers.OrdersController(app, customValidator)
+
+	sockets.InitializeSockets(app)
 
 	app.Listen(fmt.Sprintf(":%s", configuration.GetPort()))
 }

@@ -4,6 +4,8 @@ import (
 	"fiberframework/src/adapters/validation"
 	"fiberframework/src/domain/dto"
 
+	// "github.com/gofiber/contrib/socketio"
+	"github.com/gofiber/contrib/socketio"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -18,6 +20,8 @@ import (
 // @Router			/orders/{id} [get]
 func getOrderById(app *fiber.App) fiber.Router {
 	return app.Get("/orders/:id", func(ctx *fiber.Ctx) error {
+
+		socketio.Broadcast([]byte("Hello World"))
 		return ctx.SendString("Get Order By Id :" + ctx.Params("id") + ", tenantId: " + ctx.Locals("tenantId").(string))
 	})
 }
