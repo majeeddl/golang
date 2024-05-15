@@ -19,7 +19,7 @@
       "path": "unit_tests"
     },
     {
-      "path": "golang-learning1"
+      "path": "golang-learning"
     },
     {
       "path": "health-check"
@@ -29,6 +29,9 @@
     },
     {
       "path": "web-frameworks"
+    },
+    {
+      "path": "samples"
     }
   ],
   "settings": {}
