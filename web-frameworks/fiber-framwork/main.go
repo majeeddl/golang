@@ -4,6 +4,7 @@ import (
 	"fiberframework/src/adapters/controllers"
 	"fiberframework/src/adapters/middlewares"
 	"fiberframework/src/adapters/sockets"
+	"time"
 
 	"fiberframework/src/adapters/validation"
 	"fiberframework/src/configuration"
@@ -14,6 +15,7 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
+	"github.com/golang-jwt/jwt/v5"
 
 	// "github.com/gofiber/fiber/v2/middleware/cors"
 	// "github.com/gofiber/fiber/v2/middleware/recover"
@@ -42,6 +44,8 @@ func main() {
 
 	app := fiber.New()
 
+	app.Post("/login", login)
+
 	// app.Use(cache.New(cache.Config{
 	// 	Next: func(c *fiber.Ctx) bool {
 	// 		return strings.Contains(c.Route().Path, "/ws")
@@ -69,4 +73,32 @@ func main() {
 	sockets.InitializeSockets(app)
 
 	app.Listen(fmt.Sprintf(":%s", configuration.GetPort()))
+}
+
+func login(c *fiber.Ctx) error {
+
+	user := c.FormValue("user")
+	pass := c.FormValue("pass")
+
+	if user != "admin" && pass != "admin" {
+		return c.SendStatus(fiber.StatusUnauthorized)
+	}
+
+	claims := jwt.MapClaims{
+		"user":  user,
+		"admin": true,
+		"exp":   time.Now().Add(time.Hour * 72).Unix(),
+	}
+
+	// Create token
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+
+	// Generate
+	t, err := token.SignedString([]byte("secret"))
+
+	if err != nil {
+		return c.SendStatus(fiber.StatusInternalServerError)
+	}
+
+	return c.JSON(fiber.Map{"token": t})
 }
