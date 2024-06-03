@@ -15,6 +15,8 @@ import (
 	"github.com/go-playground/validator/v10"
 	jwtware "github.com/gofiber/contrib/jwt"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/csrf"
 	"github.com/golang-jwt/jwt/v5"
 
 	// "github.com/gofiber/fiber/v2/middleware/cors"
@@ -43,6 +45,8 @@ func main() {
 	}
 
 	app := fiber.New()
+	app.Use(cors.New())
+	app.Use(csrf.New())
 
 	controllers.AuthController(app)
 
