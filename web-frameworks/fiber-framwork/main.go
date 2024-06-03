@@ -4,7 +4,6 @@ import (
 	"fiberframework/src/adapters/controllers"
 	"fiberframework/src/adapters/middlewares"
 	"fiberframework/src/adapters/sockets"
-	"time"
 
 	"fiberframework/src/adapters/validation"
 	"fiberframework/src/configuration"
@@ -14,6 +13,7 @@ import (
 	_ "fiberframework/docs"
 
 	"github.com/go-playground/validator/v10"
+	jwtware "github.com/gofiber/contrib/jwt"
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
 
@@ -44,7 +44,7 @@ func main() {
 
 	app := fiber.New()
 
-	app.Post("/login", login)
+	controllers.AuthController(app)
 
 	// app.Use(cache.New(cache.Config{
 	// 	Next: func(c *fiber.Ctx) bool {
@@ -70,35 +70,26 @@ func main() {
 
 	controllers.OrdersController(app, customValidator)
 
+	// JWT Middleware
+	app.Use(jwtware.New(jwtware.Config{
+		SigningKey: jwtware.SigningKey{Key: []byte("secret")},
+	}))
+
+	// Restricted Routes
+	app.Get("/restricted", restricted)
+
 	sockets.InitializeSockets(app)
 
 	app.Listen(fmt.Sprintf(":%s", configuration.GetPort()))
 }
 
-func login(c *fiber.Ctx) error {
-
-	user := c.FormValue("user")
-	pass := c.FormValue("pass")
-
-	if user != "admin" && pass != "admin" {
-		return c.SendStatus(fiber.StatusUnauthorized)
-	}
-
-	claims := jwt.MapClaims{
-		"user":  user,
-		"admin": true,
-		"exp":   time.Now().Add(time.Hour * 72).Unix(),
-	}
-
-	// Create token
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-
-	// Generate
-	t, err := token.SignedString([]byte("secret"))
-
-	if err != nil {
-		return c.SendStatus(fiber.StatusInternalServerError)
-	}
-
-	return c.JSON(fiber.Map{"token": t})
+func restricted(c *fiber.Ctx) error {
+	fmt.Println("Restricted")
+	fmt.Println(c.Locals("user"))
+	user := c.Locals("user").(*jwt.Token)
+	claims := user.Claims.(jwt.MapClaims)
+	fmt.Println(claims)
+	username := claims["user"].(string)
+	// name := "admin"
+	return c.SendString("Welcome " + username)
 }
