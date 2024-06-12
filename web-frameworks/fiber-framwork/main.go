@@ -13,11 +13,8 @@ import (
 	_ "fiberframework/docs"
 
 	"github.com/go-playground/validator/v10"
-	jwtware "github.com/gofiber/contrib/jwt"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
-	"github.com/gofiber/fiber/v2/middleware/csrf"
-	"github.com/golang-jwt/jwt/v5"
 
 	// "github.com/gofiber/fiber/v2/middleware/cors"
 	// "github.com/gofiber/fiber/v2/middleware/recover"
@@ -46,7 +43,7 @@ func main() {
 
 	app := fiber.New()
 	app.Use(cors.New())
-	app.Use(csrf.New())
+	// app.Use(csrf.New())
 
 	controllers.AuthController(app)
 
@@ -75,25 +72,29 @@ func main() {
 	controllers.OrdersController(app, customValidator)
 
 	// JWT Middleware
-	app.Use(jwtware.New(jwtware.Config{
-		SigningKey: jwtware.SigningKey{Key: []byte("secret")},
-	}))
+	// app.Use(jwtware.New(jwtware.Config{
+	// 	SigningKey: jwtware.SigningKey{Key: []byte("secret")},
+	// }))
+	app.Use(middlewares.NewAuthMiddleware(configuration.GetSecret()))
 
 	// Restricted Routes
-	app.Get("/restricted", restricted)
+	app.Get("/restricted", middlewares.ProtectedMiddleware, func(c *fiber.Ctx) error {
+		user := c.Locals("user").(string)
+		return c.SendString("Welcome " + user)
+	})
 
 	sockets.InitializeSockets(app)
 
 	app.Listen(fmt.Sprintf(":%s", configuration.GetPort()))
 }
 
-func restricted(c *fiber.Ctx) error {
-	fmt.Println("Restricted")
-	fmt.Println(c.Locals("user"))
-	user := c.Locals("user").(*jwt.Token)
-	claims := user.Claims.(jwt.MapClaims)
-	fmt.Println(claims)
-	username := claims["user"].(string)
-	// name := "admin"
-	return c.SendString("Welcome " + username)
-}
+// func restricted(c *fiber.Ctx) error {
+// 	fmt.Println("Restricted")
+// 	fmt.Println(c.Locals("user"))
+// 	user := c.Locals("user").(*jwt.Token)
+// 	claims := user.Claims.(jwt.MapClaims)
+// 	fmt.Println(claims)
+// 	username := claims["user"].(string)
+// 	// name := "admin"
+// 	return c.SendString("Welcome " + username)
+// }

@@ -15,6 +15,8 @@ func login(c *fiber.Ctx) error {
 		Pass string `json:"pass" form:"pass" query:"pass" xml:"pass" validate:"required"`
 	}
 
+	fmt.Println(c.Body())
+
 	loginInfo := new(LoginRequest)
 
 	if err := c.BodyParser(loginInfo); err != nil {
