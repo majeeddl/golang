@@ -4,6 +4,8 @@ import (
 	"fiberframework/src/adapters/controllers"
 	"fiberframework/src/adapters/middlewares"
 	"fiberframework/src/adapters/sockets"
+	"fiberframework/src/frameworks/dataservices"
+	"os"
 
 	"fiberframework/src/adapters/validation"
 	"fiberframework/src/configuration"
@@ -67,15 +69,24 @@ func main() {
 	// app.Use(recover.New())
 	// app.Use(cors.New())
 
+	uri := os.Getenv("MONGODB_URI")
+
+	dataService := dataservices.DataService{
+		URI:      uri,
+		Database: "test",
+	}
+
+	newDataService := dataService.NewDataService()
+
 	middlewares.SetRoutesMiddlewares(app)
 
-	controllers.OrdersController(app, customValidator)
+	controllers.OrdersController(app, newDataService, customValidator)
 
 	// JWT Middleware
 	// app.Use(jwtware.New(jwtware.Config{
 	// 	SigningKey: jwtware.SigningKey{Key: []byte("secret")},
 	// }))
-	app.Use(middlewares.NewAuthMiddleware(configuration.GetSecret()))
+	// app.Use(middlewares.NewAuthMiddleware(configuration.GetSecret()))
 
 	// Restricted Routes
 	app.Get("/restricted", middlewares.ProtectedMiddleware, func(c *fiber.Ctx) error {

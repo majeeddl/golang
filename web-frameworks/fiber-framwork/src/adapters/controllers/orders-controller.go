@@ -3,11 +3,36 @@ package controllers
 import (
 	"fiberframework/src/adapters/validation"
 	"fiberframework/src/domain/dto"
+	"fiberframework/src/domain/interfaces"
+	usecases "fiberframework/src/use-cases/orders"
 
 	// "github.com/gofiber/contrib/socketio"
 	"github.com/gofiber/contrib/socketio"
 	"github.com/gofiber/fiber/v2"
 )
+
+// @Summary		Get orders
+// @Description	get orders
+// @Tags			orders
+// @Accept			json
+// @Produce		json
+// @Param			x-tenantId	header		string	true	"Tenant ID"	default("favana")
+// @Success		200			{object}	string
+// @Router			/orders [get]
+func getOrders(app *fiber.App, dataservice interfaces.IDataService) fiber.Router {
+	return app.Get("/orders", func(ctx *fiber.Ctx) error {
+
+		result, err := dataservice.OrderRepository().FindAll()
+
+		if err != nil {
+			return ctx.Status(500).JSON(err)
+		}
+
+		return ctx.JSON(result)
+		// socketio.Broadcast([]byte("Hello World"))
+		// return ctx.SendString("Get Order By Id :" + ctx.Params("id") + ", tenantId: " + ctx.Locals("tenantId").(string))
+	})
+}
 
 // @Summary		Get order by ID
 // @Description	get string by ID
@@ -38,6 +63,10 @@ func getOrderById(app *fiber.App) fiber.Router {
 func createOrder(app *fiber.App, validator *validation.Validation) fiber.Router {
 	return app.Post("/orders", func(ctx *fiber.Ctx) error {
 
+		orderUseCase := usecases.OrderUseCase{}
+
+		orderUseCase.CreateOrder()
+
 		var request dto.CreateOrderDTO
 
 		err := ctx.BodyParser(&request)
@@ -60,7 +89,8 @@ func createOrder(app *fiber.App, validator *validation.Validation) fiber.Router 
 	})
 }
 
-func OrdersController(app *fiber.App, validator *validation.Validation) {
+func OrdersController(app *fiber.App, dataservice interfaces.IDataService, validator *validation.Validation) {
+	getOrders(app, dataservice)
 	getOrderById(app)
 	createOrder(app, validator)
 }
