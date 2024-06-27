@@ -5,6 +5,7 @@ import (
 	"fiberframework/src/domain/dto"
 	"fiberframework/src/domain/interfaces"
 	usecases "fiberframework/src/use-cases/orders"
+	"fmt"
 
 	// "github.com/gofiber/contrib/socketio"
 	"github.com/gofiber/contrib/socketio"
@@ -23,6 +24,10 @@ func getOrders(app *fiber.App, dataservice interfaces.IDataService) fiber.Router
 	return app.Get("/orders", func(ctx *fiber.Ctx) error {
 
 		result, err := dataservice.OrderRepository().FindAll()
+
+		result2, err := dataservice.OrderRepository().Test()
+
+		fmt.Println(result2)
 
 		if err != nil {
 			return ctx.Status(500).JSON(err)

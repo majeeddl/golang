@@ -8,11 +8,32 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func MongoOrderRepository(ctx context.Context, database *mongo.Database) interfaces.Repository[entities.Order] {
-	var orderRepository interfaces.Repository[entities.Order] = &MongoRepository[entities.Order]{
-		Ctx:        ctx,
-		Database:   database,
-		Collection: "orders",
+type MongoRepositoryConfig struct {
+	Ctx      context.Context
+	Database *mongo.Database
+}
+
+type MongoOrderRepository struct {
+	MongoRepository[entities.Order]
+}
+
+func (r *MongoOrderRepository) Test() (string, error) {
+	return "Test", nil
+}
+
+func NewMongoOrderRepository(config MongoRepositoryConfig) interfaces.IOrderRepository {
+	// var orderRepository interfaces.IRepository[entities.Order] = &MongoRepository[entities.Order]{
+	// 	Ctx:        config.Ctx,
+	// 	Database:   config.Database,
+	// 	Collection: "orders",
+	// }
+
+	var orderRepository interfaces.IOrderRepository = &MongoOrderRepository{
+		MongoRepository[entities.Order]{
+			Ctx:        config.Ctx,
+			Database:   config.Database,
+			Collection: "orders",
+		},
 	}
 
 	return orderRepository

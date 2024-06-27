@@ -2,7 +2,6 @@ package mongo_dataservices
 
 import (
 	"context"
-	"fiberframework/src/domain/entities"
 	"fiberframework/src/domain/interfaces"
 	"fiberframework/src/frameworks/dataservices/mongo/repositories"
 
@@ -15,25 +14,38 @@ import (
 // 	"fiberframework/src/domain/interfaces"
 // )
 
+type MongoDataServiceConfig struct {
+	Uri      string
+	Database string
+}
+
 type MongoDataService struct {
-	Database *mongo.Database
-	Context  context.Context
+	Uri      string
+	Database string
+	database *mongo.Database
+	context  context.Context
 }
 
-func (m *MongoDataService) OrderRepository() interfaces.Repository[entities.Order] {
-	return repositories.MongoOrderRepository(m.Context, m.Database)
+func (m *MongoDataService) OrderRepository() interfaces.IOrderRepository {
+	return repositories.NewMongoOrderRepository(
+		repositories.MongoRepositoryConfig{
+			Ctx:      m.context,
+			Database: m.database,
+		},
+	)
 }
 
-func NewMongoDataService(uri string, database string) interfaces.IDataService {
-	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(uri))
+func NewMongoDataService(config MongoDataServiceConfig) interfaces.IDataService {
+	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(config.Uri))
 
 	if err != nil {
 		panic(err)
 	}
 
-	mongodatabase := client.Database(database)
+	mongodatabase := client.Database(config.Database)
+
 	return &MongoDataService{
-		Database: mongodatabase,
-		Context:  context.TODO(),
+		database: mongodatabase,
+		context:  context.TODO(),
 	}
 }

@@ -5,7 +5,6 @@ import (
 	"fiberframework/src/adapters/middlewares"
 	"fiberframework/src/adapters/sockets"
 	"fiberframework/src/frameworks/dataservices"
-	"os"
 
 	"fiberframework/src/adapters/validation"
 	"fiberframework/src/configuration"
@@ -69,11 +68,10 @@ func main() {
 	// app.Use(recover.New())
 	// app.Use(cors.New())
 
-	uri := os.Getenv("MONGODB_URI")
+	// uri := os.Getenv("MONGODB_URI")
 
 	dataService := dataservices.DataService{
-		URI:      uri,
-		Database: "test",
+		Type: "mongo",
 	}
 
 	newDataService := dataService.NewDataService()

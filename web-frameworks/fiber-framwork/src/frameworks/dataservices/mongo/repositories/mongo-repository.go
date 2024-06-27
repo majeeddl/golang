@@ -43,7 +43,3 @@ func (r *MongoRepository[T]) Update(id string, entity T) (T, error) {
 func (r *MongoRepository[T]) Delete(id string) error {
 	return nil
 }
-
-// func NewMongoRepository[T any]() interfaces.Repository[T] {
-// 	return &MongoRepository[T]{}
-// }
