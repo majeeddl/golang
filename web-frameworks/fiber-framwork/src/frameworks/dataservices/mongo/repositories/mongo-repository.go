@@ -7,6 +7,11 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
+type MongoRepositoryConfig struct {
+	Ctx      context.Context
+	Database *mongo.Database
+}
+
 type MongoRepository[T any] struct {
 	Ctx        context.Context
 	Database   *mongo.Database

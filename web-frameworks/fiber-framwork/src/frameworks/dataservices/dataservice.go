@@ -7,12 +7,9 @@ import (
 )
 
 type DataService struct {
-	Type     string
-	URI      string
-	Database string
 }
 
-func (dataservice *DataService) NewDataService() interfaces.IDataService {
+func (dataservice *DataService) InitMongoDataService() interfaces.IDataService {
 
 	uri := os.Getenv("MONGODB_URI")
 	database := os.Getenv("MONGODB_DATABASE")

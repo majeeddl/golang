@@ -1,17 +1,9 @@
 package repositories
 
 import (
-	"context"
 	"fiberframework/src/domain/entities"
 	"fiberframework/src/domain/interfaces"
-
-	"go.mongodb.org/mongo-driver/mongo"
 )
-
-type MongoRepositoryConfig struct {
-	Ctx      context.Context
-	Database *mongo.Database
-}
 
 type MongoOrderRepository struct {
 	MongoRepository[entities.Order]

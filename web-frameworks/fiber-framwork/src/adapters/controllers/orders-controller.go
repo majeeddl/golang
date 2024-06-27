@@ -1,9 +1,8 @@
 package controllers
 
 import (
-	"fiberframework/src/adapters/validation"
 	"fiberframework/src/domain/dto"
-	"fiberframework/src/domain/interfaces"
+	"fiberframework/src/domain/structs"
 	usecases "fiberframework/src/use-cases/orders"
 	"fmt"
 
@@ -20,12 +19,12 @@ import (
 // @Param			x-tenantId	header		string	true	"Tenant ID"	default("favana")
 // @Success		200			{object}	string
 // @Router			/orders [get]
-func getOrders(app *fiber.App, dataservice interfaces.IDataService) fiber.Router {
-	return app.Get("/orders", func(ctx *fiber.Ctx) error {
+func getOrders(config structs.ControllerConfig) fiber.Router {
+	return config.App.Get("/orders", func(ctx *fiber.Ctx) error {
 
-		result, err := dataservice.OrderRepository().FindAll()
+		result, err := config.DataService.OrderRepository().FindAll()
 
-		result2, err := dataservice.OrderRepository().Test()
+		result2, err := config.DataService.OrderRepository().Test()
 
 		fmt.Println(result2)
 
@@ -48,8 +47,8 @@ func getOrders(app *fiber.App, dataservice interfaces.IDataService) fiber.Router
 // @Param			x-tenantId	header		string	true	"Tenant ID"	default("favana")
 // @Success		200			{object}	string
 // @Router			/orders/{id} [get]
-func getOrderById(app *fiber.App) fiber.Router {
-	return app.Get("/orders/:id", func(ctx *fiber.Ctx) error {
+func getOrderById(config structs.ControllerConfig) fiber.Router {
+	return config.App.Get("/orders/:id", func(ctx *fiber.Ctx) error {
 
 		socketio.Broadcast([]byte("Hello World"))
 		return ctx.SendString("Get Order By Id :" + ctx.Params("id") + ", tenantId: " + ctx.Locals("tenantId").(string))
@@ -65,8 +64,8 @@ func getOrderById(app *fiber.App) fiber.Router {
 // @Param			x-tenantId			header		string				true	"Tenant ID"	default("favana")
 // @Success		200					{object}	string
 // @Router			/orders [post]
-func createOrder(app *fiber.App, validator *validation.Validation) fiber.Router {
-	return app.Post("/orders", func(ctx *fiber.Ctx) error {
+func createOrder(config structs.ControllerConfig) fiber.Router {
+	return config.App.Post("/orders", func(ctx *fiber.Ctx) error {
 
 		orderUseCase := usecases.OrderUseCase{}
 
@@ -80,7 +79,7 @@ func createOrder(app *fiber.App, validator *validation.Validation) fiber.Router 
 			return ctx.Status(400).JSON("Error parsing request")
 		}
 
-		if errs := validator.Validate(validator.Validator, request); errs != nil {
+		if errs := config.Validator.Validate(config.Validator.Validator, request); errs != nil {
 			// errorMessages := make([]string, len(errs))
 
 			// for i, err := range errs {
@@ -94,8 +93,8 @@ func createOrder(app *fiber.App, validator *validation.Validation) fiber.Router 
 	})
 }
 
-func OrdersController(app *fiber.App, dataservice interfaces.IDataService, validator *validation.Validation) {
-	getOrders(app, dataservice)
-	getOrderById(app)
-	createOrder(app, validator)
+func OrdersController(config structs.ControllerConfig) {
+	getOrders(config)
+	getOrderById(config)
+	createOrder(config)
 }

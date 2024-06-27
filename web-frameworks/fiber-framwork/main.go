@@ -4,6 +4,7 @@ import (
 	"fiberframework/src/adapters/controllers"
 	"fiberframework/src/adapters/middlewares"
 	"fiberframework/src/adapters/sockets"
+	"fiberframework/src/domain/structs"
 	"fiberframework/src/frameworks/dataservices"
 
 	"fiberframework/src/adapters/validation"
@@ -70,15 +71,19 @@ func main() {
 
 	// uri := os.Getenv("MONGODB_URI")
 
-	dataService := dataservices.DataService{
-		Type: "mongo",
-	}
+	dataService := dataservices.DataService{}
 
-	newDataService := dataService.NewDataService()
+	mongoDataService := dataService.InitMongoDataService()
 
 	middlewares.SetRoutesMiddlewares(app)
 
-	controllers.OrdersController(app, newDataService, customValidator)
+	controllerConfig := structs.ControllerConfig{
+		App:         app,
+		DataService: mongoDataService,
+		Validator:   customValidator,
+	}
+
+	controllers.OrdersController(controllerConfig)
 
 	// JWT Middleware
 	// app.Use(jwtware.New(jwtware.Config{
