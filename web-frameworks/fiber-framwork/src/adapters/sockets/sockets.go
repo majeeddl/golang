@@ -22,6 +22,10 @@ func InitializeSockets(app *fiber.App) error {
 	// The key for the map is message.to
 	clients := make(map[string]string)
 
+	// create a new socketio instance
+
+	// server := socketio.New(nil)
+
 	// Multiple event handling supported
 	socketio.On(socketio.EventConnect, func(ep *socketio.EventPayload) {
 		fmt.Println(fmt.Sprintf("Connection event 1 - User: %s", ep.Kws.GetStringAttribute("user_id")))

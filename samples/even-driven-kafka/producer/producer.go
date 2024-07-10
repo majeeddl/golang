@@ -38,7 +38,7 @@ func ConnectProducer(brokerUrl []string) (sarama.SyncProducer, error) {
 
 func PushCommentToKafka(topic string, message []byte) error {
 	// code to push comment to kafka
-	brokerUrl := []string{"localhost:9092"}
+	brokerUrl := []string{"localhost:9092", "localhost:9093"}
 
 	producer, err := ConnectProducer(brokerUrl)
 

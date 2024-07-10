@@ -13,7 +13,7 @@ import (
 func main() {
 	topic := "comments"
 
-	worker, err := connectConsumer([]string{"localhost:9092"})
+	worker, err := connectConsumer([]string{"localhost:9092", "localhost:9093"})
 
 	consumer, err := worker.ConsumePartition(topic, 0, sarama.OffsetNewest)
 
