@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"github.com/gofiber/contrib/socketio"
-	"github.com/gofiber/contrib/websocket"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -22,6 +21,7 @@ func InitializeSockets(app *fiber.App) error {
 	// The key for the map is message.to
 	clients := make(map[string]string)
 
+	fmt.Println("Initializing sockets")
 	// create a new socketio instance
 
 	// server := socketio.New(nil)
@@ -97,13 +97,21 @@ func InitializeSockets(app *fiber.App) error {
 	app.Use("/ws", func(c *fiber.Ctx) error {
 		// IsWebSocketUpgrade returns true if the client
 		// requested upgrade to the WebSocket protocol.
-		if websocket.IsWebSocketUpgrade(c) {
-			c.Locals("allowed", true)
-			return c.Next()
-		}
-		return fiber.ErrUpgradeRequired
+		// if websocket.IsWebSocketUpgrade(c) {
+		// 	c.Locals("allowed", true)
+		return c.Next()
+		// }
+		// return fiber.ErrUpgradeRequired
 		// return c.Next()
 	})
+
+	app.Get("/socket.io/", socketio.New(func(kws *socketio.Websocket) {
+		// Allow all connections
+		kws.SetAttribute("allowed", true)
+		kws.SetAttribute("user_id", "admin")
+		kws.Emit([]byte("Hello admin"), socketio.TextMessage)
+		socketio.Broadcast([]byte(fmt.Sprintf("New user connected: %s and UUID: %s", "admin", kws.UUID)))
+	}))
 
 	app.Get("/ws/:id", socketio.New(func(kws *socketio.Websocket) {
 

@@ -15,6 +15,7 @@ import (
 	_ "fiberframework/docs"
 
 	"github.com/go-playground/validator/v10"
+	"github.com/gofiber/contrib/socketio"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 
@@ -95,6 +96,12 @@ func main() {
 	app.Get("/restricted", middlewares.ProtectedMiddleware, func(c *fiber.Ctx) error {
 		user := c.Locals("user").(string)
 		return c.SendString("Welcome " + user)
+	})
+
+	app.Get("/test", func(c *fiber.Ctx) error {
+
+		socketio.Broadcast([]byte("Hello World"))
+		return c.SendString("Hello World")
 	})
 
 	sockets.InitializeSockets(app)
